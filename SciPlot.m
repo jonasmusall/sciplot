@@ -15,7 +15,7 @@ Options[InternalSinglePlot] = {
     PlotStyle -> Black
 }
 Options[SciPlot] = {
-    AxesOrigin -> Automatic
+    AxesOrigin -> Automatic,
     PlotRange -> Automatic
 }
 
