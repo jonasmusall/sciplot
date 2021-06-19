@@ -15,6 +15,7 @@ Options[InternalSinglePlot] = {
     PlotStyle -> Black
 }
 Options[SciPlot] = {
+    AxesOrigin -> Automatic
     PlotRange -> Automatic
 }
 
@@ -37,13 +38,27 @@ InternalSinglePlot[list_List, OptionsPattern[]] :=
     ]
 
 SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}}]]&), OptionsPattern[]] :=
-    Module[{plotRange = OptionValue[PlotRange]},
-        If[plotRange == Automatic,
-            plotRange = PlotRange[InternalSinglePlot[{x}[[1]], MaxPlotPoints -> 25, MaxRecursion -> 5, PerformanceGoal -> "Speed"]]
+    Module[
+        {
+            defaultOptRules = Options[
+                InternalSinglePlot[{x}[[1]], MaxPlotPoints -> 25, MaxRecursion -> 5, PerformanceGoal -> "Speed"],
+                {AxesOrigin, PlotRange}
+            ],
+            optAxesOrigin = OptionValue[AxesOrigin],
+            optPlotRange = OptionValue[PlotRange]
+        },
+        If[optAxesOrigin == Automatic,
+            optAxesOrigin = AxesOrigin /. defaultOptRules
+        ];
+        If[optPlotRange == Automatic,
+            optPlotRange = PlotRange /. defaultOptRules
         ];
         Show[
-            (InternalSinglePlot[#, PlotRange -> plotRange]&) /@ {x},
+            (InternalSinglePlot[#,
+                PlotRange -> optPlotRange
+            ]&) /@ {x},
             Axes -> True,
+            AxesOrigin -> optAxesOrigin,
             TicksStyle -> Directive[Black, FontSize -> 12, FontFamily -> "Times"]
         ]
     ]
