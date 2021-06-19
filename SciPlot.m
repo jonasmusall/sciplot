@@ -7,7 +7,6 @@ Begin["`Private`"]
 InternalPlotMarkers = {{Graphics[{Thin, Line[{{{-1, -1}, {1, 1}}, {{-1, 1}, {1, -1}}}]}], Medium}}
 
 Options[InternalSinglePlot] = {
-    Axes -> False,
     MaxPlotPoints -> Infinity,
     MaxRecursion -> Automatic,
     PerformanceGoal -> "Quality",
@@ -21,15 +20,20 @@ Options[SciPlot] = {
 
 InternalSinglePlot[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}, OptionsPattern[]] :=
     Plot[f, {x, xmin, xmax},
+        Axes -> False,
         MaxRecursion -> OptionValue[MaxRecursion],
         PerformanceGoal -> OptionValue[PerformanceGoal],
-        PlotRange -> OptionValue[PlotRange]
+        PlotRange -> OptionValue[PlotRange],
+        PlotStyle -> OptionValue[PlotStyle]
     ]
 InternalSinglePlot[list_List, OptionsPattern[]] :=
     ListPlot[list,
+        Axes -> False,
         MaxPlotPoints -> OptionValue[MaxPlotPoints],
         PerformanceGoal -> OptionValue[PerformanceGoal],
-        PlotRange -> OptionValue[PlotRange]
+        PlotMarkers -> OptionValue[PlotMarkers],
+        PlotRange -> OptionValue[PlotRange],
+        PlotStyle -> OptionValue[PlotStyle]
     ]
 
 SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}}]]&), OptionsPattern[]] :=
