@@ -7,13 +7,13 @@ Begin["`Private`"]
 InternalPlotMarkers = {{Graphics[{Thin, Line[{{{-1, -1}, {1, 1}}, {{-1, 1}, {1, -1}}}]}], Medium}}
 
 Options[InternalSinglePlot] = {
-    PlotRange -> Automatic,
     Axes -> False,
-    PlotStyle -> Black,
-    PlotMarkers -> InternalPlotMarkers[[1]],
-    PerformanceGoal -> "Quality",
     MaxPlotPoints -> Infinity,
-    MaxRecursion -> Automatic
+    MaxRecursion -> Automatic,
+    PerformanceGoal -> "Quality",
+    PlotMarkers -> InternalPlotMarkers[[1]],
+    PlotRange -> Automatic,
+    PlotStyle -> Black
 }
 Options[SciPlot] = {
     PlotRange -> Automatic
@@ -21,21 +21,21 @@ Options[SciPlot] = {
 
 InternalSinglePlot[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}, OptionsPattern[]] :=
     Plot[f, {x, xmin, xmax},
-        PlotRange -> OptionValue[PlotRange],
+        MaxRecursion -> OptionValue[MaxRecursion],
         PerformanceGoal -> OptionValue[PerformanceGoal],
-        MaxRecursion -> OptionValue[MaxRecursion]
+        PlotRange -> OptionValue[PlotRange]
     ]
 InternalSinglePlot[list_List, OptionsPattern[]] :=
     ListPlot[list,
-        PlotRange -> OptionValue[PlotRange],
+        MaxPlotPoints -> OptionValue[MaxPlotPoints],
         PerformanceGoal -> OptionValue[PerformanceGoal],
-        MaxPlotPoints -> OptionValue[MaxPlotPoints]
+        PlotRange -> OptionValue[PlotRange]
     ]
 
 SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}}]]&), OptionsPattern[]] :=
     Module[{plotRange = OptionValue[PlotRange]},
         If[plotRange == Automatic,
-            plotRange = PlotRange[InternalSinglePlot[{x}[[1]], PerformanceGoal -> "Speed", MaxPlotPoints -> 25, MaxRecursion -> 5]]
+            plotRange = PlotRange[InternalSinglePlot[{x}[[1]], MaxPlotPoints -> 25, MaxRecursion -> 5, PerformanceGoal -> "Speed"]]
         ];
         Show[
             (InternalSinglePlot[#, PlotRange -> plotRange]&) /@ {x},
