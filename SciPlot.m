@@ -7,6 +7,7 @@ Begin["`Private`"]
 InternalPlotMarkers = {{Graphics[{Thin, Line[{{{-1, -1}, {1, 1}}, {{-1, 1}, {1, -1}}}]}], Medium}}
 
 Options[InternalSinglePlot] = {
+    AxesOrigin -> Automatic,
     MaxPlotPoints -> Infinity,
     MaxRecursion -> Automatic,
     PerformanceGoal -> "Quality",
@@ -36,6 +37,7 @@ GetContentCount[list_List] :=
 InternalSinglePlot[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}, OptionsPattern[]] :=
     Plot[f, {x, xmin, xmax},
         Axes -> False,
+        AxesOrigin -> OptionValue[AxesOrigin],
         MaxRecursion -> OptionValue[MaxRecursion],
         PerformanceGoal -> OptionValue[PerformanceGoal],
         PlotLabels -> None,
@@ -45,6 +47,7 @@ InternalSinglePlot[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}, OptionsPatt
 InternalSinglePlot[list_List, OptionsPattern[]] :=
     ListPlot[list,
         Axes -> False,
+        AxesOrigin -> OptionValue[AxesOrigin],
         MaxPlotPoints -> OptionValue[MaxPlotPoints],
         PerformanceGoal -> OptionValue[PerformanceGoal],
         PlotLabels -> None,
@@ -95,6 +98,7 @@ SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}
         plot = Show[
             MapIndexed[
                 InternalSinglePlot[#1,
+                    AxesOrigin -> optAxesOrigin,
                     PlotRange -> optPlotRange,
                     PlotStyle -> optPlotStyle[[styleAssoc[[#2[[1]], 1]];; styleAssoc[[#2[[1]], 2]]]]
                 ]&,
