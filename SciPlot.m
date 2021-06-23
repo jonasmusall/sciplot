@@ -64,7 +64,12 @@ SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}
             labelPosX,
             labelPosY,
             defaultOptRules = Options[
-                InternalSinglePlot[{x}[[1]], MaxPlotPoints -> 25, MaxRecursion -> 5, PerformanceGoal -> "Speed"],
+                InternalSinglePlot[{x}[[1]],
+                    AxesOrigin -> OptionValue[AxesOrigin],
+                    MaxPlotPoints -> 25,
+                    MaxRecursion -> 5,
+                    PerformanceGoal -> "Speed",
+                    PlotRange -> OptionValue[PlotRange]],
                 {AxesOrigin, PlotRange}
             ],
             optAxesLabel = OptionValue[AxesLabel],
