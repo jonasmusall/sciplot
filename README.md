@@ -21,3 +21,6 @@ Point where the axes cross. Valid values are points `{x, y}` or `Automatic`.
 
 ### PlotRange
 Range to display in the plot. Valid values are ranges for both directions `{{xMin, xMax}, {yMin, yMax}}` or `Automatic`.
+
+### PlotStyle
+Style for the plots to be drawn in. Specify a single style to be applied to all plots or a list of styles.

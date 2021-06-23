@@ -12,14 +12,27 @@ Options[InternalSinglePlot] = {
     PerformanceGoal -> "Quality",
     PlotMarkers -> InternalPlotMarkers[[1]],
     PlotRange -> Automatic,
-    PlotStyle -> Black
+    PlotStyle -> Directive[Black, Thin]
 }
 Options[SciPlot] = {
     AxesLabel -> None,
     AxesOrigin -> Automatic,
-    PlotRange -> Automatic
+    PlotRange -> Automatic,
+    PlotStyle -> Directive[Black, Thin]
 }
 
+GetContentCount[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}] := If[Head[f] === List, Length[f], 1]
+GetContentCount[list_List] :=
+    If[Length[list] > 0,
+        If[MatchQ[Dimensions[list], {_}],
+            If[Head[First[list]] === List,
+                Length[list],
+                1
+            ],
+            1
+        ],
+        0
+    ]
 InternalSinglePlot[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}, OptionsPattern[]] :=
     Plot[f, {x, xmin, xmax},
         Axes -> False,
@@ -47,6 +60,7 @@ SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}
     Module[
         {
             plot,
+            styleAssoc = {#[[1]], #[[1]] + #[[2]] - 1}& /@ Transpose[{Drop[FoldList[Plus, 1, #], -1], #}]&[GetContentCount /@ {x}],
             labelPosX,
             labelPosY,
             defaultOptRules = Options[
@@ -55,7 +69,8 @@ SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}
             ],
             optAxesLabel = OptionValue[AxesLabel],
             optAxesOrigin = OptionValue[AxesOrigin],
-            optPlotRange = OptionValue[PlotRange]
+            optPlotRange = OptionValue[PlotRange],
+            optPlotStyle = OptionValue[PlotStyle]
         },
         If[!(Head[optAxesLabel] === List),
             optAxesLabel = {None, optAxesLabel}
@@ -66,12 +81,20 @@ SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}
         If[optPlotRange == Automatic,
             optPlotRange = PlotRange /. defaultOptRules
         ];
+        If[!(Head[optPlotStyle] === List),
+            optPlotStyle = {optPlotStyle}
+        ];
+        optPlotStyle = PadRight[optPlotStyle, styleAssoc[[-1, 2]], optPlotStyle];
         labelPosX = GetLabledPosition[optPlotRange[[2]], optAxesOrigin[[2]]];
         labelPosY = GetLabledPosition[optPlotRange[[1]], optAxesOrigin[[1]]];
         plot = Show[
-            (InternalSinglePlot[#,
-                PlotRange -> optPlotRange
-            ]&) /@ {x},
+            MapIndexed[
+                InternalSinglePlot[#1,
+                    PlotRange -> optPlotRange,
+                    PlotStyle -> optPlotStyle[[styleAssoc[[#2[[1]], 1]];; styleAssoc[[#2[[1]], 2]]]]
+                ]&,
+                {x}
+            ],
             Axes -> True,
             AxesLabel -> {
                 If[labelPosX == "Axis" || (labelPosX == "Max" && labelPosY == "Axis"), ApplyDefaultStyle@optAxesLabel[[1]], None],
