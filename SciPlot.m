@@ -8,6 +8,7 @@ InternalPlotMarkers = {{Graphics[{Thin, Line[{{{-1, -1}, {1, 1}}, {{-1, 1}, {1, 
 
 Options[InternalSinglePlot] = {
     AxesOrigin -> Automatic,
+    ImageSize -> Large,
     MaxPlotPoints -> Infinity,
     MaxRecursion -> Automatic,
     PerformanceGoal -> "Quality",
@@ -18,6 +19,7 @@ Options[InternalSinglePlot] = {
 Options[SciPlot] = {
     AxesLabel -> None,
     AxesOrigin -> Automatic,
+    ImageSize -> Large,
     PlotRange -> Automatic,
     PlotStyle -> Directive[Black, Thin],
     Ticks -> Automatic
@@ -39,6 +41,7 @@ InternalSinglePlot[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}, OptionsPatt
     Plot[f, {x, xmin, xmax},
         Axes -> False,
         AxesOrigin -> OptionValue[AxesOrigin],
+        ImageSize -> OptionValue[ImageSize],
         MaxRecursion -> OptionValue[MaxRecursion],
         PerformanceGoal -> OptionValue[PerformanceGoal],
         PlotLabels -> None,
@@ -49,6 +52,7 @@ InternalSinglePlot[list_List, OptionsPattern[]] :=
     ListPlot[list,
         Axes -> False,
         AxesOrigin -> OptionValue[AxesOrigin],
+        ImageSize -> OptionValue[ImageSize],
         MaxPlotPoints -> OptionValue[MaxPlotPoints],
         PerformanceGoal -> OptionValue[PerformanceGoal],
         PlotLabels -> None,
@@ -100,6 +104,7 @@ SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}
             MapIndexed[
                 InternalSinglePlot[#1,
                     AxesOrigin -> optAxesOrigin,
+                    ImageSize -> OptionValue[ImageSize],
                     PlotRange -> optPlotRange,
                     PlotStyle -> optPlotStyle[[styleAssoc[[#2[[1]], 1]];; styleAssoc[[#2[[1]], 2]]]]
                 ]&,
