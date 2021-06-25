@@ -19,7 +19,8 @@ Options[SciPlot] = {
     AxesLabel -> None,
     AxesOrigin -> Automatic,
     PlotRange -> Automatic,
-    PlotStyle -> Directive[Black, Thin]
+    PlotStyle -> Directive[Black, Thin],
+    Ticks -> Automatic
 }
 
 GetContentCount[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}] := If[Head[f] === List, Length[f], 1]
@@ -112,6 +113,7 @@ SciPlot[x__?(Or[Head[#] == List, MatchQ[#, {_, {_Symbol, _?NumericQ, _?NumericQ}
             AxesOrigin -> optAxesOrigin,
             PlotLabel -> None,
             PlotLabels -> None,
+            Ticks -> OptionValue[Ticks],
             TicksStyle -> Directive[Black, FontSize -> 12, FontFamily -> "Times"]
         ];
         If[((labelPosX != "Axis" && !(optAxesLabel[[1]] === None)) || (labelPosY != "Axis" && !(optAxesLabel[[2]] === None))) && !(labelPosX == "Max" && labelPosY == "Axis"),
