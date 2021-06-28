@@ -1,5 +1,5 @@
 # SciPlot
-A Mathematica package to easily make good looking plots of functions and datasets. Under development. Feature set subject to rapid major changes.
+A Mathematica package to easily make good looking plots of functions and datasets. Under development. Feature set subject to rapid major changes. See [Tutorial.nb](Tutorial.nb) or [Tutorial.pdf](Tutorial.pdf) for in-depth usage and examples.
 
 ## Usage
 First, import the latest version.
