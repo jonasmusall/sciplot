@@ -14,6 +14,7 @@ Options[InternalSinglePlot] = {
     PerformanceGoal -> "Quality",
     PlotMarkers -> InternalPlotMarkers[[1]],
     PlotRange -> Automatic,
+    PlotRangePadding -> {{Scaled[0.02], Scaled[0.02]}, {Scaled[0.05], Scaled[0.05]}},
     PlotStyle -> Directive[Black, Thin]
 }
 Options[SciPlot] = {
@@ -46,6 +47,7 @@ InternalSinglePlot[{f_, {x_Symbol, xmin_?NumericQ, xmax_?NumericQ}}, OptionsPatt
         PerformanceGoal -> OptionValue[PerformanceGoal],
         PlotLabels -> None,
         PlotRange -> OptionValue[PlotRange],
+        PlotRangePadding -> OptionValue[PlotRangePadding],
         PlotStyle -> OptionValue[PlotStyle]
     ]
 InternalSinglePlot[list_List, OptionsPattern[]] :=
@@ -58,6 +60,7 @@ InternalSinglePlot[list_List, OptionsPattern[]] :=
         PlotLabels -> None,
         PlotMarkers -> OptionValue[PlotMarkers],
         PlotRange -> OptionValue[PlotRange],
+        PlotRangePadding -> OptionValue[PlotRangePadding],
         PlotStyle -> OptionValue[PlotStyle]
     ]
 ApplyDefaultStyle[x_] := If[x === None, None, Style[x, Black, FontSize -> 14, FontFamily -> "Times"]]
